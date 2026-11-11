@@ -5,45 +5,45 @@
 # Safe to run anytime - it only starts what isn't already running.
 REPO=/workspaces/literate-octo-fortnight
 
-echo "=== サービス起動チェック ==="
+echo "=== Service startup check ==="
 
-# ffmpegが何らかの理由(リビルド時のpostCreateCommand失敗など)で
-# 消えていることがあるため、無ければここで自己修復する。
+# ffmpeg can disappear for reasons like a failed postCreateCommand during a rebuild,
+# so repair it automatically here if needed.
 if ! command -v ffmpeg >/dev/null 2>&1; then
-  echo "[修復] ffmpegが見つからないためインストールします..."
+  echo "[Repair] ffmpeg was not found; installing it now..."
   sudo apt-get update -qq && sudo apt-get install -y ffmpeg pulseaudio-utils
   if command -v ffmpeg >/dev/null 2>&1; then
-    echo "[修復完了] ffmpegをインストールしました"
+    echo "[Repair complete] ffmpeg was installed successfully"
   else
-    echo "[失敗] ffmpegのインストールに失敗しました"
+    echo "[Error] ffmpeg installation failed"
   fi
 fi
 
 if ss -tln 2>/dev/null | grep -q ':8998 '; then
-  echo "[OK] 音声配信(8998)はすでに動作中です"
+  echo "[OK] Audio stream (8998) is already running"
 else
   nohup bash -c 'while true; do ffmpeg -fflags nobuffer -flags low_delay -f pulse -i auto_null.monitor -acodec libmp3lame -b:a 64k -ar 44100 -ac 2 -flush_packets 1 -f mp3 -listen 1 http://0.0.0.0:8998/stream.mp3; sleep 2; done' > /tmp/audio-stream.log 2>&1 &
   disown
   sleep 2
   if ss -tln 2>/dev/null | grep -q ':8998 '; then
-    echo "[起動] 音声配信(8998)を起動しました"
+    echo "[Started] Audio stream (8998) is now running"
   else
-    echo "[失敗] 音声配信(8998)の起動に失敗しました。/tmp/audio-stream.log を確認してください"
+    echo "[Error] Audio stream (8998) failed to start. Check /tmp/audio-stream.log"
   fi
 fi
 
 if ss -tln 2>/dev/null | grep -q ':8999 '; then
-  echo "[OK] 音声ページ配信(8999)はすでに動作中です"
+  echo "[OK] Audio page server (8999) is already running"
 else
   nohup python3 -m http.server 8999 --directory "$REPO" > /tmp/http8999.log 2>&1 &
   disown
   sleep 1
   if ss -tln 2>/dev/null | grep -q ':8999 '; then
-    echo "[起動] 音声ページ配信(8999)を起動しました"
+    echo "[Started] Audio page server (8999) is now running"
   else
-    echo "[失敗] 音声ページ配信(8999)の起動に失敗しました。/tmp/http8999.log を確認してください"
+    echo "[Error] Audio page server (8999) failed to start. Check /tmp/http8999.log"
   fi
 fi
 
 echo ""
-echo "完了。ブラウザで開く: https://<あなたのcodespace名>-8999.app.github.dev/audio.html"
+echo "Done. Open in a browser: https://<your-codespace-name>-8999.app.github.dev/audio.html"

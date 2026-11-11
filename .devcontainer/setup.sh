@@ -17,16 +17,16 @@ fi
 echo "==> Installing packages"
 sudo apt-get update
 sudo DEBIAN_FRONTEND=noninteractive apt-get install -y \
-  language-pack-ja language-pack-gnome-ja language-pack-kde-ja fonts-noto-cjk \
+  language-pack-en language-pack-gnome-en language-pack-kde-en fonts-noto-cjk \
   fcitx5 fcitx5-mozc fcitx5-config-qt fcitx5-frontend-qt5 fcitx5-frontend-gtk3 im-config \
   ffmpeg pulseaudio-utils dbus-x11
 sudo DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends winehq-stable
 
-echo "==> Japanese locale"
-sudo locale-gen ja_JP.UTF-8
-sudo update-locale LANG=ja_JP.UTF-8
+echo "==> English locale"
+sudo locale-gen en_US.UTF-8
+sudo update-locale LANG=en_US.UTF-8
 im-config -n fcitx5
-sudo sed -i 's/^LANGUAGE=.*/LANGUAGE="ja_JP:ja"/' /etc/environment
+sudo sed -i 's/^LANGUAGE=.*/LANGUAGE="en_US:en"/' /etc/environment
 
 mkdir -p ~/.config/autostart ~/.config/plasma-workspace/env
 
@@ -53,9 +53,9 @@ chmod +x ~/.config/plasma-workspace/env/00-dbus.sh
 echo "==> Session-wide locale env"
 cat > ~/.config/plasma-workspace/env/01-locale.sh << 'EOF'
 #!/bin/sh
-export LANG=ja_JP.UTF-8
-export LC_ALL=ja_JP.UTF-8
-export LANGUAGE=ja_JP:ja
+export LANG=en_US.UTF-8
+export LC_ALL=en_US.UTF-8
+export LANGUAGE=en_US:en
 EOF
 chmod +x ~/.config/plasma-workspace/env/01-locale.sh
 
@@ -132,9 +132,9 @@ Terminal=false
 Categories=Game;
 EOF
   chmod +x "$PERSIST/Desktop/RobloxStudio.desktop"
-  echo "    -> ショートカット作成: $ROBLOX_EXE"
+  echo "    -> Created shortcut: $ROBLOX_EXE"
 else
-  echo "    -> RobloxStudioBeta.exe が見つかりません(未インストール、または初回インストール後の次回rebuildから有効になります)"
+  echo "    -> RobloxStudioBeta.exe not found (not installed yet, or it becomes available after the next rebuild following the first install)"
 fi
 
 echo "==> Setting up one-command / one-click service starter"
@@ -148,8 +148,8 @@ mkdir -p "$PERSIST/Desktop"
 cat > "$PERSIST/Desktop/start-services.desktop" << EOF
 [Desktop Entry]
 Type=Application
-Name=サービス再起動(音声など)
-Comment=止まっている音声配信などをまとめて起動します
+Name=Restart services (audio, etc.)
+Comment=Starts any stalled audio streams and related services
 Exec=konsole --noclose -e bash $REPO/start-services.sh
 Icon=media-playback-start
 Terminal=false

@@ -8,7 +8,7 @@ REPO=/workspaces/literate-octo-fortnight
 EXE=$(find "$REPO/.wineprefix/drive_c" -iname "RobloxStudioBeta.exe" 2>/dev/null | head -1)
 
 if [ -z "$EXE" ]; then
-  echo "[失敗] RobloxStudioBeta.exe が見つかりません。先にRoblox Studioをインストールしてください。"
+  echo "[ERROR] RobloxStudioBeta.exe was not found. Please install Roblox Studio first."
   exit 1
 fi
 
@@ -26,4 +26,4 @@ EOF
 update-desktop-database ~/.local/share/applications
 xdg-mime default roblox-studio-auth.desktop x-scheme-handler/roblox-studio-auth
 
-echo "[完了] roblox-studio-auth:// のハンドラーを登録しました ($EXE)"
+echo "[DONE] Registered the roblox-studio-auth:// handler ($EXE)"
