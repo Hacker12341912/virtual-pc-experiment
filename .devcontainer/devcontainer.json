@@ -32,9 +32,9 @@
     "PASSWD": "${localEnv:VPC_PASSWORD:changeme123}",
     // Boot the desktop session directly in Japanese (previously the session
     // started in English before the language pack finished installing).
-    "LANG": "ja_JP.UTF-8",
-    "LC_ALL": "ja_JP.UTF-8",
-    "LANGUAGE": "ja_JP:ja",
+    "LANG": "en_US.UTF-8",
+    "LC_ALL": "en_US.UTF-8",
+    "LANGUAGE": "en_US:en",
     // Selkies' WebRTC media stream needs raw TCP/UDP to a TURN server, which
     // Codespaces' HTTPS-only port forwarding cannot carry. KasmVNC instead
     // streams everything as a plain WebSocket over the same forwarded HTTP(S)
