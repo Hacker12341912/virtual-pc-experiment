@@ -16,7 +16,7 @@ services:
       # - "65532-65535:65532-65535"
       # - "65532-65535:65532-65535/udp"
     environment:
-      TZ: "Asia/Tokyo"
+      TZ: "America/Los_Angeles"
       DISPLAY_SIZEW: "1920"
       DISPLAY_SIZEH: "1080"
       DISPLAY_REFRESH: "60"
